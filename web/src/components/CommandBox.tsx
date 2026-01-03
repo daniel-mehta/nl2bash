@@ -1,12 +1,15 @@
 import React, {useState} from 'react'
+import {detectRisk, RiskLevel} from '../utils/risk'
 
 export default function CommandBox(){
   const [input,setInput] = useState('')
   const [result,setResult] = useState<string | null>(null)
+  const [risk, setRisk] = useState<RiskLevel>('low')
 
   function handleRun(){
-    // placeholder: in real app call backend or use heuristic
-    setResult(`echo "You asked: ${input.replace(/"/g,'\"')}"`)
+    const generated = `echo "You asked: ${input.replace(/"/g,'\"')}"` // placeholder: in real app call backend or use heuristic
+    setResult(generated)
+    setRisk(detectRisk(generated))
   }
 
   return (
@@ -19,8 +22,11 @@ export default function CommandBox(){
       </div>
 
       {result && (
-        <div style={{marginTop:12}} className="card">
-          <div style={{fontFamily:'monospace',whiteSpace:'pre'}}>{result}</div>
+        <div className="card" style={{marginTop:12}}>
+          <div className={`risk-indicator ${risk}`} style={{marginTop:8}}>
+            Risk Level: {risk === 'high' ? 'High risk' : risk === 'medium' ? 'Medium' : 'Low'}
+          </div>
+          <pre style={{fontFamily:'monospace', whiteSpace:'pre'}}>{result}</pre>
         </div>
       )}
     </div>

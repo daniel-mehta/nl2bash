@@ -7,9 +7,28 @@ export default function CommandBox(){
   const [risk, setRisk] = useState<RiskLevel>('low')
 
   function handleRun(){
-    const generated = `echo "You asked: ${input.replace(/"/g,'\"')}"` // placeholder: in real app call backend or use heuristic
-    setResult(generated)
-    setRisk(detectRisk(generated))
+    // Call backend endpoint to generate command
+    fetch("http://localhost:3000/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input, os: "wsl" })
+    })
+      .then(async (r) => {
+        if (!r.ok) {
+          const err = await r.json().catch(() => ({ error: r.statusText }));
+          setResult(`Error: ${err.error || JSON.stringify(err)}`);
+          setRisk('high');
+          return;
+        }
+        const data = await r.json();
+        const cmd = Array.isArray(data.commands) ? data.commands.join('\n') : JSON.stringify(data);
+        setResult(cmd);
+        setRisk(detectRisk(cmd));
+      })
+      .catch((e) => {
+        setResult(`Fetch error: ${String(e)}`);
+        setRisk('high');
+      });
   }
 
   return (

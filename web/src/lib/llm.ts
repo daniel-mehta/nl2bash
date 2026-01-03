@@ -3,14 +3,16 @@ import path from "node:path";
 import OpenAI from "openai";
 import { BashCommandSchema, type BashCommandResult } from "./schema";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
-
 async function loadPrompt(): Promise<string> {
-  // Works in Next.js on Vercel using process.cwd()
-  const promptPath = path.join(process.cwd(), "prompt", "prompt.txt");
-  return fs.readFile(promptPath, "utf-8");
+  // Try repo-root `prompt/prompt.txt` first (used when server runs from repo root).
+  const rootPrompt = path.join(process.cwd(), "prompt", "prompt.txt");
+  try {
+    return await fs.readFile(rootPrompt, "utf-8");
+  } catch {
+    // Fallback: look in `web/prompt/prompt.txt` which is present in this repo.
+    const webPrompt = path.join(process.cwd(), "web", "prompt", "prompt.txt");
+    return fs.readFile(webPrompt, "utf-8");
+  }
 }
 
 function buildUserMessage(params: { input: string; os?: string }) {
@@ -27,6 +29,10 @@ export async function generateBashFromText(params: {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("Missing OPENAI_API_KEY in environment.");
   }
+
+  // Create the OpenAI client lazily so importing this module doesn't throw
+  // when `OPENAI_API_KEY` is not present (helps local dev without secrets).
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const systemPrompt = await loadPrompt();
   const userMessage = buildUserMessage({ input: params.input, os: params.os });

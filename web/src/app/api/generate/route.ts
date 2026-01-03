@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { generateBashFromText } from "@/lib/llm";
-import { sanitizeModelResult } from "@/lib/safety";
+import { generateBashFromText } from "../../../lib/llm";
+import { sanitizeModelResult } from "../../../lib/safety";
 
 const RequestSchema = z.object({
   input: z.string().min(1, "input is required"),

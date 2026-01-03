@@ -2,18 +2,16 @@ import React from 'react'
 import CommandBox from '../components/CommandBox'
 import Examples from '../components/Examples'
 import Assumptions from '../components/Assumptions'
-import RiskBadge from '../components/RiskBadge'
+import { RiskProvider } from '../lib/riskContext'
 
 export default function Page(){
   return (
-    <div className="app">
+    <RiskProvider>
+      <div className="app">
       <header className="header">
         <div>
           <div className="title">nl2bash — natural language to bash</div>
           <div className="muted">Type a request and get a suggested shell command</div>
-        </div>
-        <div style={{marginLeft:'auto'}}>
-          <RiskBadge level="low">Low risk</RiskBadge>
         </div>
       </header>
 
@@ -37,5 +35,6 @@ export default function Page(){
         </aside>
       </div>
     </div>
+    </RiskProvider>
   )
 }

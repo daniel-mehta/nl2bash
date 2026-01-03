@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 import {detectRisk, RiskLevel} from '../utils/risk'
+import { useRisk } from '../lib/riskContext'
 
 export default function CommandBox(){
   const [input,setInput] = useState('')
   const [result,setResult] = useState<string | null>(null)
-  const [risk, setRisk] = useState<RiskLevel>('low')
+  const { risk, setRisk } = useRisk()
 
   function handleRun(){
     // Call backend endpoint to generate command

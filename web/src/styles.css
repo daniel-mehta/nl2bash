@@ -1,0 +1,23 @@
+:root{
+  --bg:#0f1720;
+  --card:#0b1220;
+  --muted:#9aa4b2;
+  --accent:#7c5cff;
+  --success:#34d399;
+}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#07101a);color:#e6eef6}
+.app{max-width:900px;margin:48px auto;padding:28px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+.header{display:flex;align-items:center;gap:12px}
+.title{font-size:20px;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:18px}
+.card{background:rgba(255,255,255,0.02);padding:14px;border-radius:8px}
+.commandBox textarea{width:100%;height:120px;background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:6px;color:inherit}
+.btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+.muted{color:var(--muted);font-size:14px}
+.examples li{margin-bottom:8px}
+.assumptions li{margin-bottom:6px}
+.risk{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:600}
+.risk.low{background:rgba(52,211,153,0.12);color:var(--success)}
+.risk.high{background:rgba(255,94,94,0.12);color:#ff5e5e}
